@@ -4,18 +4,23 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+
+	"github.com/redis/go-redis/v9"
 )
 
 // used to store application dependencies
 type App struct {
 	router http.Handler
+	rdb    *redis.Client
 }
 
 // constructor
 func New() *App {
 	app := &App{
-		router: loadRoutes(),
+		rdb: redis.NewClient(&redis.Options{}),
 	}
+
+	app.loadRoutes()
 
 	return app
 }
